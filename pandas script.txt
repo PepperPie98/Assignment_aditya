@@ -1,0 +1,33 @@
+
+#pandas
+import pandas as pd
+sales= pd.read_excel("C:/Users/PepperPie/Desktop/output files eastvantage assignment/using Pandas/source files/sales.xlsx")
+
+customer= pd.read_excel("C:/Users/PepperPie/Desktop/output files eastvantage assignment/using Pandas/source files/customer.xlsx")
+
+
+orders = pd.read_excel("C:/Users/PepperPie/Desktop/output files eastvantage assignment/using Pandas/source files/orders.xlsx")
+
+items = pd.read_excel("C:/Users/PepperPie/Desktop/output files eastvantage assignment/using Pandas/source files/items.xlsx")
+
+sdf= pd.DataFrame(sales)
+cdf=pd.DataFrame(customer)
+odf = pd.DataFrame(orders)
+idf = pd.DataFrame(items)
+
+
+
+D1 = pd.merge(sdf,cdf)
+D2 = pd.merge(odf,idf)
+
+Fd= pd.merge(D1,D2)
+Fd.rename(
+    columns={"customerid": "Customer", "itemname": "item"},
+    inplace=True,)
+need1 = Fd[["Customer","age","item","quantity"]]
+
+need = need1.groupby(['Customer','age','item'],group_keys=False).apply(lambda x: x).sum('quantity')
+
+final = display(need.loc[need['age']>= 18 & (need['age']<= 30) & (need['quantity']>0) , ['Customer','age','item','quantity']])
+
+final.to_csv('outputfile.csv')

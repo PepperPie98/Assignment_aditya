@@ -1,0 +1,88 @@
+create table sales(
+salesid integer not null,
+customerid integer not null
+);
+
+
+
+insert into sales values(100,10000);
+insert into sales values(200,20000);
+insert into sales values(300,20000);
+insert into sales values(400,20000);
+
+
+create table Customer(
+age integer not null,
+customerid integer not null
+);
+
+insert into Customer values(18,10000);
+insert into Customer values(35,20000);
+
+create table Orders(
+orderid integer not null,
+salesid integer not null,
+item_id integer not null,
+quantity integer 
+);
+
+insert into Orders values(001,100,789,2);
+insert into Orders values(002,200,789,12);
+insert into Orders values(003,300,789,12);
+insert into Orders values(003,400,790,15);
+
+
+
+
+create table Item(
+item_id integer not null,
+item_name varchar(50) not null
+);
+
+
+insert into Item values(789,"shells");
+insert into Item values(790,"bells");
+
+
+
+create view myTable as 
+(select Customer.customerid as Customer,
+Age,item_name as Item,
+quantity as Quantity
+from Customer
+join sales on Customer.customerid=sales.customerid
+join Orders on Orders.salesid =  sales.salesid
+join Item on Orders.item_id=Item.item_id
+)
+;
+select * from myTable;
+
+DELIMITER $$
+
+select Customer,Age, Item, sum(quantity) as Qnty from myTable
+where (age>=18 and age<=35) and quantity>0
+group by Customer, Age, Item
+order by Customer
+$$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
